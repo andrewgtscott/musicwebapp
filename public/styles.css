@@ -1,0 +1,51 @@
+.navbar .navbar-nav {
+  margin-left: auto;
+}
+
+.navbar .navbar-nav:hover{
+  color: white;
+}
+
+.navbar .nav-item .btn {
+  margin-left: 10px;
+  background-color: black;
+  color: #fff;
+  border-color: black;
+  
+}
+
+.navbar .nav-item .btn:hover {
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+
+#vertical .nav-link{
+  color:black;
+}
+
+.nav-link{
+  color: black;
+}
+
+.navbar {
+  padding:1%;
+}
+
+#signuprow {
+  margin-bottom: 10px;
+}
+
+#containerheight{
+  height: 100%;
+}
+
+.form-control:focus {
+  border-color: black;
+  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.2);
+}
+
+.small-star{
+  font-size: 16px; 
+}
+

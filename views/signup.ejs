@@ -1,0 +1,191 @@
+<%- include('head.ejs') %>
+
+  <body>
+    <a href="javascript:history.back()" class="btn "><i class="material-icons">arrow_back</i></a>
+    <div class="container text-center pt-3 pb-3 ">
+      <div class="row">
+        <div class="col">
+          <div class="row" id="signuprow">
+            <div class="col">
+              <a class="navbar-brand" href="/"> <img
+                  src="https://cdn-icons-png.flaticon.com/512/49/49383.png?w=1060&t=st=1682021589~exp=1682022189~hmac=4abd03bbae7b61aee8ba9117baf8972b23c167976c6df1268131a5d0d98e9a00"
+                  width="50" height="50" class="img-fluid"></a>
+            </div>
+          </div>
+          <div class="row mx-auto" id="signuprow">
+            <div class="col">
+              <p class="fs-2 fw-bold">Sign up to share your music collection!</p>
+            </div>
+          </div>
+          <div class="row" id="signuprow">
+            <div class="col">
+              <p class="fs-4 fw-semibold">Sign up with your email address</p>
+            </div>
+          </div>
+          <form class="row needs-validation" action="/signup" method="POST" id="signup-form"> <!---->
+            <div class="row py-3">
+              <div class="col-6 mx-auto">
+                <label for="user_email" class="form-label">
+                  <p class="fs-6 fw-medium">What's your email?</p>
+                </label>
+                <input type="email" class="form-control" id="user_email" name="user_email"
+                  placeholder="Enter your email" required>
+                <div class="invalid-feedback">
+                  Please enter a valid email address.
+                </div>
+              </div>
+            </div>
+            <div class="row py-3">
+              <div class="col-6 mx-auto">
+                <label for="user_password" class="form-label">
+                  <p class="fs-6 fw-medium">Create a password</p>
+                </label>
+                <input type="password" class="form-control" id="user_password" name="user_password"
+                  placeholder="Create a password" required>
+                <div class="invalid-feedback">
+                  Please enter a password.
+                </div>
+              </div>
+            </div>
+            <div class="row py-3">
+              <div class="col-6 mx-auto">
+                <label for="user_name" class="form-label">
+                  <p class="fs-6 fw-medium">What should we call you?</p>
+                </label>
+                <div class="input-group has validation">
+                  <span class="input-group-text" id="inputGroupPrepend">@</span>
+                  <input type="text" class="form-control" id="user_name" name="user_name" placeholder="Enter a username"
+                    aria-describedby="inputGroupPrepend" required>
+                  <div class="invalid-feedback">
+                    Please choose a username.
+                  </div>
+                  <span id="username-message"></span> <!---->
+
+
+                </div>
+              </div>
+              <div class="row py-3">
+                <div class="col-6 mx-auto">
+                  <label for="user_dob">
+                    <p class="fs-6 fw-medium">What's your date of birth?</p>
+                  </label>
+                  <div class="input-group">
+                    <input type="date" class="form-control" id="user_dob" name="user_dob" required>
+                    <div class="invalid-feedback">
+                      Please enter your date of birth.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 py-3">
+                <button type="submit" class="btn btn-outline-dark btn-lg ">Sign up</button> <!---->
+              </div>
+          </form>
+          <div class="row">
+            <div class="col mx-auto">Have an account? <a class="text-danger-emphasis" href="/login">Log in</a></div>
+          </div>
+
+        </div>
+      </div>
+
+
+  </body>
+
+  </html>
+
+  <script>
+// Get the form, message element, and sign up button from the Document Object Model
+const form = document.querySelector('#signup-form');
+const message = document.querySelector('#username-message');
+const signUpButton = document.querySelector('button[type="submit"]');
+
+// Function to check username availability
+const checkUsernameAvailability = async (username) => {
+  try {
+    // Send a POST request to the server to check the username availability
+    const response = await fetch('http://localhost:3000/check-username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ user_name: username }),
+    });
+
+    if (response.ok) {
+      // If the response is successful, parse the JSON data
+      const data = await response.json();
+      if (data.usernameExists) {
+        // Display a message if the username is already in use
+        message.innerHTML = '<span class="badge bg-danger">Username is already in use</span>';
+        signUpButton.disabled = true;
+      } else {
+        // Display a message if the username is available
+        message.innerHTML = '<span class="badge bg-success">Username is available</span>';
+        signUpButton.disabled = false;
+      }
+    } else {
+      // Display an error message if the response is not successful
+      message.innerHTML = '<span class="badge bg-info">Error checking username availability</span>';
+      signUpButton.disabled = true;
+    }
+  } catch (err) {
+    // Display an error message if an exception occurs during the request
+    message.innerHTML = '<span class="badge bg-info">Error checking username availability</span>';
+    console.error(err);
+    signUpButton.disabled = true;
+  }
+};
+
+// Get the username input element and add an input event listener
+const usernameInput = document.querySelector('#user_name');
+usernameInput.addEventListener('input', () => {
+  // When the username input changes, trim the value and check its availability
+  const username = usernameInput.value.trim();
+  if (username !== '') {
+    checkUsernameAvailability(username);
+  } else {
+    // Clear the message and disable the sign-up button if the username is empty
+    message.innerHTML = '';
+    signUpButton.disabled = true;
+  }
+});
+
+// Add a submit event listener to the form
+form.addEventListener('submit', async (event) => {
+  // Prevent the default form submission
+  event.preventDefault();
+
+  // Get the values from the form fields
+  const userEmail = document.querySelector('#user_email').value;
+  const userPassword = document.querySelector('#user_password').value;
+  const userName = document.querySelector('#user_name').value;
+  const userDob = document.querySelector('#user_dob').value;
+
+  try {
+    // Send a POST request to the server with the form data to sign up the user
+    const response = await fetch('http://localhost:3000/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user_email: userEmail,
+        user_password: userPassword,
+        user_name: userName,
+        user_dob: userDob,
+      }),
+    });
+
+    if (response.ok) {
+      // If the response is successful, redirect the user to the login page
+      window.location.href = '/login';
+    } else {
+      console.log(err);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
+
+  </script>
+  

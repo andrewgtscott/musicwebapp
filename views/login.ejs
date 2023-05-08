@@ -1,0 +1,70 @@
+<%- include('head.ejs') %>
+
+<body>
+  <a href="javascript:history.back()" class="btn "><i class="material-icons">arrow_back</i></a>
+  <div class="container text-center pt-3 pb-3">
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <a class="navbar-brand" href="/">
+              <img src="https://cdn-icons-png.flaticon.com/512/49/49383.png?w=1060&t=st=1682021589~exp=1682022189~hmac=4abd03bbae7b61aee8ba9117baf8972b23c167976c6df1268131a5d0d98e9a00"
+                width="50" height="50" class="img-fluid">
+            </a>
+          </div>
+        </div>
+        <div class="row mx-auto">
+          <div class="col">
+            <p class="fs-2 fw-bold">Welcome back!</p>
+          </div>
+        </div>
+        <div class="row mx-auto">
+          <div class="col">
+            <p class="fs-4 fw-semibold">Enter your details</p>
+          </div>
+        </div>
+        <form class="row needs-validation" action = "/login" id="loginForm" method="POST">
+          <div class="row py-3">
+            <div class="col-6 mx-auto">
+              <label for="inputUsername" class="form-label">
+                <p class="fs-6 fw-medium">Username</p>
+              </label>
+              <div class="input-group has-validation">
+                <span class="input-group-text" id="inputGroupPrepend">@</span>
+                <input type="text" class="form-control" id="inputUsername" placeholder="Username" name="usernameField"
+                  aria-describedby="inputGroupPrepend" required>
+              </div>
+            </div>
+          </div>
+          <div class="row py-3">
+            <div class="col-6 mx-auto">
+              <label for="inputPassword" class="form-label">
+                <p class="fs-6 fw-medium">Password</p>
+              </label>
+              <input type="password" class="form-control" id="inputPassword" name="passwordField" placeholder="Password"
+                required>
+            </div>
+          </div>
+          <% if (typeof error != "undefined") { %>
+            <div class="error-message text-danger">
+              <%= error %>
+            </div>
+          <% } %>
+          <div class="col-12 py-3">
+            <button type="submit" value = "login" class="btn btn-outline-dark btn-lg">Log in</button>
+          </div>
+        </form>
+        <div class="row">
+          <div class="col mx-auto">
+            <p class="fs-4 fw-semibold">Don't have an account?</p>
+          </div>
+        </div>
+        <div class="row">
+          <a class="text-danger-emphasis" href="/signup">Sign up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

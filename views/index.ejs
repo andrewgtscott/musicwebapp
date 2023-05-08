@@ -1,0 +1,107 @@
+<%- include('head.ejs') %>
+
+    <body>
+
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <%- include('sidebar.ejs') %>
+                    <main role="main" class="col-md-10">
+                        <div class="row bg-light">
+                            <%- include('navbar.ejs') %>
+                        </div>
+                        <div class="row">
+                            <div
+                                class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                               <% if(typeof userdata != "undefined") {%>
+                                <h1 class="h2">Welcome to StacksOfWax, <%=userdata.user_name%></h1>
+                                <%}else{%>
+                                  <h1 class="h2">Welcome to StacksOfWax</h1>
+                                  <%}%>
+                                
+                              
+                            </div>
+                        </div>
+                        <div class = "row">
+                          <h3 class="h3">Explore music collections created by other users:</h3>
+                        </div>
+                        
+                        <div class="row">
+                          <div class="row row-cols-1 row-cols-md-2 g-4">
+                            <% data.forEach((collection) => { %> <!-- Iterating over each collection in the data array -->
+                            <div class="row mx-auto py-3 px-4">
+                              <div class="card bg-light border-0 rounded-3 shadow-lg">
+                                <div class="card-body text-center">
+                                  <a href="/collections/<%=collection.user_collection_id%>" class="card-title fw-bold mb-3 text-danger-emphasis">
+                                    <h3><%= collection.collection_title %></h3>
+                                  </a>
+                                  <p class="card-text text-muted">
+                                    <%= collection.collection_description %>
+                                  </p>
+                                  <p class="card-text text-muted">
+                                    Created by <strong><%= collection.collection_creator %></strong>
+                                  </p>
+                                  <div class="comments">
+                                    <h6 class="fw-bold mt-3">Comments and ratings:</h6>
+                                    <% if (collection.comments.length > 0) { %>
+                                      <% collection.comments.forEach((comment) => { %>
+                                      <div class="comment text-muted">
+                                        <p><strong><%= comment.commenter %>:</strong> <%= comment.comment %><strong> Rating: </strong>
+                                           <% for(i=0; i < comment.rating; i++){ %> 
+                                             <i class="material-icons small-star">star</i> 
+                                            <%}%>
+                                        </p>
+                                      </div>
+                                      <% }); %>
+                                    <% } else { %>
+                                      <p class="text-muted">No comments</p>
+                                    <% } %>
+                                  </div>
+                                  <% if (typeof userdata !== "undefined") { %>
+                                    <div class="comment-form mt-4">
+                                      <h6 class="fw-bold mb-3">Add a Comment:</h6>
+                                      <form action="/add-comment" method="POST">
+                                        <div class="form-group py-3">
+                                          <textarea class="form-control" rows="2" name="comment" placeholder="Add a comment"></textarea>
+                                        </div>
+                                        <div class="form-group py-3">
+                                          <label for="ratingSelect" class="fw-bold">Rate this collection from 1-5:</label>
+                                          <select class="form-control" id="ratingSelect" name="rating">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                          </select>
+                                        </div>
+                                        <input type="hidden" name="user_collection_id" value="<%= collection.user_collection_id %>">
+                                        <input type="hidden" name="user_id" value="<%= userdata.user_id %>">
+                                        <button type="submit" class="btn btn-outline-dark">Submit</button>
+                                      </form>
+                                    </div>
+                                    
+                                  <% } %>
+                                </div>
+                              </div>
+                            </div>
+                            <% }); %>
+                          </div>
+                        </div>
+                        
+                          
+                          
+                          
+                          
+                          
+                    </main>
+            </div>
+        </div>
+
+
+        <%- include('footer.ejs') %>
+
+
+    </body>
+
+    </html>

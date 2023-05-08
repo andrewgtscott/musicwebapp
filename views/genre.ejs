@@ -1,0 +1,54 @@
+<%- include('head.ejs') %>
+
+    <body>
+
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <%- include('sidebar.ejs') %>
+                    <main role="main" class="col-md-10">
+                        <div class="row bg-light">
+                            <%- include('searchnavbar.ejs') %>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                                <a href="/explore" class="btn "><i class="material-icons">arrow_back</i></a>
+                                <h1 class="h2 mx-auto">Albums</h1>
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="row row-cols-1 row-cols-md-2 g-4">
+                                <% const albumNames=new Set(); %>
+                                    <% data.forEach((album)=> { %>
+                                       <% if (!albumNames.has(album.album_name)) { %>
+                                        <div class="col">
+                                            <a class="text-bg-success" href="/album/<%=album.album_name%>">
+                                                <div class="card mb-3">
+
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">
+                                                            <%=album.album_name%>
+                                                        </h5>
+                                                        <p class="card-text">
+                                                            <%=album.album_description%>
+                                                        </p>
+
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                     <% albumNames.add(album.album_name); } }); %>
+                            </div>
+                        </div>
+
+                    </main>
+            </div>
+        </div>
+
+        <%- include('footer.ejs') %>
+
+    </body>
+
+    </html>

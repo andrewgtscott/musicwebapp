@@ -1,0 +1,59 @@
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column nav-underline" id="vertical">
+
+      <div class="row">
+        <div class="col d-flex justify-content-center">
+          <% if(typeof userdata=="undefined" ){ %>
+            <a class="navbar-brand d-none d-md-block py-4 text-dark" href="/">
+              <img src="https://cdn-icons-png.flaticon.com/512/49/49383.png?w=1060&t=st=1682021589~exp=1682022189~hmac=4abd03bbae7b61aee8ba9117baf8972b23c167976c6df1268131a5d0d98e9a00" width="50" height="50" class="img-fluid py-2">
+            </a>
+          <%} else {%>
+            <a class="navbar-brand d-none d-md-block py-4 text-dark" href="/dashboard">
+              <img src="https://cdn-icons-png.flaticon.com/512/49/49383.png?w=1060&t=st=1682021589~exp=1682022189~hmac=4abd03bbae7b61aee8ba9117baf8972b23c167976c6df1268131a5d0d98e9a00" width="50" height="50" class="img-fluid py-2">
+            </a>
+          <%}%>
+        </div>
+      </div>
+
+      <div class="row py-1">
+        <% if(typeof userdata=="undefined" ){ %>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/">Home</a>
+          </li>
+        <%} else {%>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/dashboard">Home</a>
+          </li>
+        <%}%>
+      </div>
+
+      <!-- Force next columns to break to new line -->
+      <div class="w-100"></div>
+
+      <div class="row">
+        <li class="nav-item">
+          <a class="nav-link text-dark" href="/explore">
+            Search
+          </a>
+        </li>
+      </div>
+
+      <!-- Force next columns to break to new line -->
+      <div class="w-100"></div>
+
+      <div class="row pt-5">
+        <% if (typeof userdata !== 'undefined' ) { %>
+          <li class="nav-item">
+            <a class="nav-link text-dark" href="/createcollection">Manage Collections</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link text-dark" onclick="alert(`<%=message%>`)">Manage Collections</a>
+          </li>
+        <% } %>
+      </div>
+      
+    </ul>
+  </div>
+</nav>

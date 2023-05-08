@@ -1,0 +1,138 @@
+<%- include('head.ejs') %>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <%- include('sidebar.ejs') %>
+            <main role="main" class="col-md-10">
+                <div class="row bg-light">
+                    <%- include('navbar.ejs') %>
+                </div>
+                <div class="row">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2"> Create your own collection </h1>
+                     
+                </div>
+                <div class="row">
+                <!-- Form for creating a collection -->
+                <form class="row needs-validation" action="/create-collection" method="POST">
+                    <div class="row py-3">
+                        <div class="col-6 mx-auto">
+                            <label for="collectionName" class="form-label">
+                                <p class="fs-6 fw-medium">Collection Name</p>
+                            </label>
+                            <input type="text" class="form-control" id="collectionName" name="collectionName" required>
+                        </div>
+                    </div>
+                    <div class="row py-3">
+                        <div class="col-6 mx-auto">
+                            <label for="collectionDescription" class="form-label">
+                                <p class="fs-6 fw-medium">Collection Description</p>
+                            </label>
+                            <textarea class="form-control" id="collectionDescription" name="collectionDescription" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" name="userId" value="<%= userdata.user_id %>">
+                    <div class="col-12 py-3 text-center d-flex justify-content-center">
+                        <button type="submit" class="btn btn-outline-dark">Create Collection</button>
+                      </div>
+                      
+                </form>
+            </div>
+            <div class="row py-5">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2"> Your collections </h1>
+        
+                </div>
+            </div>
+
+
+            <% if (userdata && data && data.length !== 0) { %>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <% data.forEach(function(collection) { %>
+                        <% if (collection.collection_creator === userdata.user_name) { %>
+                            <div class="row mx-auto py-3 px-4">
+                                <div class="card bg-light border-0 rounded-3 shadow-lg">
+                                    <div class="card-body text-center">
+                                        <a href="/collections/<%= collection.user_collection_id %>" class="card-title fw-bold mb-3">
+                                            <h3><%= collection.collection_title %></h3>
+                                        </a>
+                                        <p class="card-text text-muted">
+                                            <%= collection.collection_description %>
+                                        </p>
+                                        <p class="card-text text-muted">
+                                            Created by <strong><%= collection.collection_creator %></strong>
+                                        </p>
+                                        <div class="comments">
+                                            <h6 class="fw-bold mt-3">Comments:</h6>
+                                            <% if (collection.comments.length > 0) { %>
+                                                <% collection.comments.forEach(function(comment) { %>
+                                                    <div class="comment text-muted">
+                                                        <p><strong><%= comment.commenter %>:</strong> <%= comment.comment %></p>
+                                                    </div>
+                                                <% }); %>
+                                            <% } else { %>
+                                                <p class="text-muted">No comments</p>
+                                            <% } %>
+                                        </div>
+                                        <ul class="list-group">
+                                            <% collection.songs.forEach(function(song) { %>
+                                              <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <%= song.song_name %>
+                                                <form action="/collections/<%= collection.user_collection_id %>/remove-song" method="POST" class="d-inline">
+                                                  <input type="hidden" name="song_id" value="<%= song.song_id %>">
+                                                  <button type="submit" class="btn btn-danger btn-sm">Remove Song</button>
+                                                </form>
+                                              </li>
+                                            <% }); %>
+                                          </ul>
+                                          
+                                          <div class="mt-3">
+                                            <form action="/collections/<%= collection.user_collection_id %>/remove-collection" method="POST">
+                                              <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                                Delete Collection
+                                              </button>
+                                            </form>
+                                          </div>
+                                          
+                                          <!-- Modal -->
+                                          <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                              <div class="modal-content">
+                                                <div class="modal-header">
+                                                  <h5 class="modal-title" id="deleteModalLabel">Delete Collection</h5>
+                                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                  This collection be permanently deleted
+                                                </div>
+                                                <div class="modal-footer">
+                                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                  <form action="/collections/<%= collection.user_collection_id %>/remove-collection" method="POST">
+                                                    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                                                  </form>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          
+                                          
+                                          
+                                    </div>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% }); %>
+                </div>
+            <% } else { %>
+                <p>You have no collections yet.</p>
+            <% } %>
+            
+
+            </main>
+        </div>
+    </div>
+
+    <%- include('footer.ejs') %>
+</body>
+</html>
